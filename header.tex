@@ -1,0 +1,157 @@
+
+%!TEX encoding = UTF-8 Unicode
+
+%---------------------------------------------------
+%
+% 図表に関する指定
+%
+%---------------------------------------------------
+
+%% 表の大きさの自動調整
+\usepackage{adjustbox}
+
+%% 欧文の表形式の実現
+\usepackage{booktabs}
+
+%% リンクを埋め込んである文字列の強調
+\hypersetup{
+    colorlinks = true,
+    citecolor = [RGB]{24,127,196},
+    linkcolor = [RGB]{24, 127,196},
+    urlcolor = [RGB]{24,127,196}%orange
+}
+
+%% 画像の位置の設置
+\usepackage{float} % Don't delete after 2020.06.08 update to rmarkdown 2.2
+\floatplacement{figure}{H}
+\usepackage[font=tiny]{subfig} %beamer用
+
+%% 図表タイトルの文字の大きさの設定
+%\usepackage[font=small,labelfont={bf,sf}]{caption} %論文用
+%\usepackage[font=tiny,labelfont={bf,sf}]{caption} %論文用
+%beamerでのcaptionフォントサイズ変更は\setbeamerfont{caption}{size=\tiny}で行う
+
+%% 図表番号の前に来るFigure/Table表記をFig./Tab.表記に変更
+%\addto\captionsenglish{\renewcommand{\figurename}{Fig.}}
+%\addto\captionsenglish{\renewcommand{\tablename}{Tab.}}
+
+%% 数式の整形
+\usepackage{ascmac}
+
+%% 囲み記事の設定
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}        
+
+%---------------------------------------------------
+%
+% フォント指定
+%
+%---------------------------------------------------
+
+\expandafter\def\csname ver@unicode-math.sty\endcsname{}
+
+\usepackage{fontspec}
+
+%% 欧文・主フォント（セリフ体［ローマン体］）
+\setmainfont[Scale = 1.1]{Linux Libertine O}
+
+%% 欧文・サンセリフ体フォント（いわゆるゴシック体に見えるフォント）
+\setsansfont[Scale = 1.1,%1.00375
+             BoldFont = Roboto-Bold.otf,
+             ItalicFont = Roboto-italic.otf,
+             BoldItalicFont = Roboto-bolditalic.otf]{Roboto-Regular.otf}
+
+%% 欧文・タイプライタ体（コードの表示に使用）
+\setmonofont[Scale=MatchLowercase]{zcoN}
+
+%% 数字
+\setmathfont[Scale=MatchUppercase]{LibertinusMath-Regular.otf}
+
+%% 和文フォント
+\usepackage{zxjatype}
+
+%% 欧文フォントに対する日本語フォントの大きさ（倍率）
+\setjafontscale{1} %インストール案内
+
+%% 和文・主フォント（明朝体）
+\setjamainfont[BoldFont = SourceHanSansJP-Bold.otf]{SourceHanSerifJP-Light.otf}
+
+%% 和文・ゴシック体
+\setjasansfont[Scale=1, BoldFont = SourceHanSansJP-Bold.otf]{SourceHanSansJP-Normal.otf}
+
+%% 和文・タイプライタ体
+\setjamonofont{SourceHanSansJP-Normal.otf}
+
+%---------------------------------------------------
+%
+% natbibを使う際に参考文献フォントを小さくする指定
+%
+%---------------------------------------------------
+
+%https://tex.stackexchange.com/questions/354101/using-natbib-make-new-entries-not-start-at-new-line
+
+%\def\bibfont{\footnotesize}
+%\def\bibfont{\tiny}
+
+%---------------------------------------------------
+%
+% 行頭インデント・行間の設定
+%
+%---------------------------------------------------
+
+%% 段落の頭を字下げで始める
+\usepackage{indentfirst}
+
+%% 段落の頭の字下げ幅
+\setlength{\parindent}{12pt} %日本語用
+%\setlength{\parindent}{1.27cm} %英語用 APA 6版
+\parskip=0pt
+
+%% 行間の幅
+\renewcommand{\baselinestretch}{1.2}
+
+\usepackage{ragged2e}
+
+\usepackage{calc}
+
+%---------------------------------------------------
+%
+% 言語学関係の設定
+%
+%---------------------------------------------------
+
+\usepackage{lingmacros}
+
+%% グロス
+\makeatletter % {gb4e}packageの妨害コマンドを抑止する
+\def\new@fontshape{} % {gb4e}packageの妨害コマンドを抑止する
+\makeatother % {gb4e}packageの妨害コマンドを抑止する
+\let\mathexp=\exp % save the current (math) definition of \exp
+\usepackage{gb4e}\noautomath
+\let\gbexp=\exp % save the current (gb4e) definition of \exp
+\DeclareRobustCommand{\exp}{\ifmmode\mathexp\else\expandafter\gbexp\fi}
+
+% 1行目（原文）をイタリック体で表記
+\let\eachwordone=\itshape
+
+%% 国際音声字母
+\usepackage{tipa}
+\DeclareTextFontCommand{\textipa}{%
+  \fontfamily{ptm}\tipaencoding
+}
+\renewenvironment{IPA}{\fontfamily{ptm}\tipaencoding}{}
+
+
+%% 木構造
+\usepackage[linguistics]{forest}
+%\usepackage{tikz}
+%\usepackage{tikz-qtree}
+
+%% HPSGでのAVM（attribute-value matrices）
+\usepackage{avm}
+
+\usepackage{fvextra}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}, fontsize=\small}
+
+\usepackage{metalogo}
+
