@@ -1,0 +1,115 @@
+```{r}
+## Load WLSP from its GitHub Repo
+v <- read.table(
+  "https://raw.githubusercontent.com/masayu-a/WLSP/master/bunruidb.txt",
+  header = FALSE, 
+  sep = ",",
+  fileEncoding = "cp932"
+  )
+
+## Select the relevant columns
+v %<>% 
+  select(V3, V4, V5, V6, V7, V13, V14) %>% 
+  filter(
+    ., 
+    V3 != "B",
+    V4 == "用", # 22694
+    ) %>% 
+  filter(str_detect(V14, "^[ぁ-ん]"))
+View(v)
+View(v2)
+str_detect(v$V14, "[ぁ-ん]")
+ 
+```
+
+
+```{r}
+mode(v2$V14)
+test <- c("ほげ", "ふが", "ぴよ", "extra", "deal", "authority")
+mode(test)
+str_detect(test, "^[ぁ-ん]")
+str_detect(v2$V14, "^[ぁ-ん]")
+str_subset(v2$V14, "^[ぁ-ん]", negate = TRUE)
+
+mtcars %>% 
+  filter(rowname %in% c("Merc", "Toyota"))
+
+mtcars %>% 
+  filter(str_detect(rowname, "Merc"))
+
+v %>% 
+  filter(
+    str_detect(
+      V13, "^[…|－]", 
+      #negate = TRUE
+      )
+    ) %>% 
+  View()
+## 格助詞を含む->これでは「たがう」を含んでしまう
+v %>% 
+  filter(
+    str_detect(
+      V13, "[が|を|に]", 
+      #negate = TRUE
+      )
+    ) %>% 
+  View()
+
+## 格助詞ではない「が」を含む
+v %>% 
+  filter(
+    str_detect(
+      V13, "が.$", 
+      #negate = TRUE
+      )
+    ) %>% 
+  View()
+
+## 格助詞「を」を含む
+v %>% 
+  filter(
+    str_detect(
+      V13, "を", 
+      #negate = TRUE
+      )
+    ) %>% 
+  View()
+
+## 格助詞「に」を含む
+v %>% 
+  filter(
+    str_detect(
+      V13, "^.+に", 
+      #negate = TRUE
+      )
+    ) %>% 
+  View()
+
+
+test2 <- c("さおをさす", "そでにする", "にらめっこする")
+
+test2 %>% 
+  str_detect("^.+に") 
+nrow(v)
+```
+
+# 分類語彙表
+
+データは、 https://raw.githubusercontent.com/masayu-a/WLSP/master/bunruidb.txt からロードした。
+
+動詞類を意味する「用の類」の内、重なりのないレコードすなわちレコード種別Bの行と、見出しが「＊」であるレコードを除いた 
+`r v %>% filter(., V3 != "B", V4 == "用") %>% nrow()`
+件から、さらに
+「－れる」「…ている」のような接辞的要素、「」
+`r v %>% filter(str_detect(V13, "^[…|－]")) %>% nrow()`
+件
+
+`r v %>% filter(., V3 != "B", V4 == "用") %>% filter(str_detect(V14, "^[ぁ-ん]")) %>% nrow()`
+
+[研究室から：『分類語彙表』増補改訂版について | 国語研の窓 | ことば研究館](https://kotobaken.jp/mado/15/15-02/)
+
+「」
+「を」を含むイディオム 
+
+「間に合わす」のように既に「ニ」が格助詞としての意味を失っている例もあるが、「ふるいに掛ける」のように「ニ」の格助詞としての意味が希薄ではないものもある、
+動詞（動詞的イディオム）内での格助詞の語彙化程度は連続的であり、明確に語彙化しているものとしているものを区分する基準を定められないため、ここでは、格助詞に由来する動詞（動詞的イディオム）は一律に除外した。

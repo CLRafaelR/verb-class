@@ -237,3 +237,130 @@ writeLines(
     }%
 }
 ```
+
+```{r setup, include=FALSE}
+extrafont::loadfonts(device = "win")
+windowsFonts(sans = windowsFont("Roboto Medium"))
+
+set.seed(425)
+
+library(MASS)
+
+library(tidyverse)
+# ggplot2, for data visualisation.
+# dplyr, for data manipulation.
+# tidyr, for data tidying.
+# readr, for data import.
+# purrr, for functional programming.
+# tibble, for tibbles, a modern re-imagining of data frames.
+# stringr, for strings.
+# forcats, for factors.
+
+library(magrittr)
+library(lme4)
+library(hypr)
+library(brms)
+library(extraDistr)
+library(ggplot2)
+library(brms)
+
+library(rstan)
+## Save compiled models:
+rstan_options(
+  auto_write = TRUE#,
+  #silent = TRUE,
+  #open_progress=FALSE,
+  #show_messages=FALSE
+  )
+## Parallelize the chains using all the cores:
+options(mc.cores = parallel::detectCores())
+
+library(bayesplot)
+library(tictoc)
+library(gridExtra)
+
+## To solve some conflicts between  packages
+select <- dplyr::select
+extract <- rstan::extract
+
+library(knitr)
+knitr::opts_chunk$set( 
+                      echo       = TRUE,
+                      cache      = TRUE, 
+                      message    = FALSE, 
+                      warning    = FALSE,
+                      fig.path   = "figure/2020bayesian-",
+                      fig.align  = "center",
+                      fig.height = 4.5,
+                      fig.width  = 6, 
+                      fig.align  = "center",
+                      out.width  = "70%",
+                      dev        = "cairo_pdf",
+                      dev.args   = list(family = "Roboto Medium")
+                      )
+#op <- knit_hooks$get()$source
+#knitr::knit_hooks$set(source = function(x, options) 
+#  op(
+#    if(
+#      is.numeric(options$eval)
+#      )
+#      x[options$eval]
+#    else x, 
+#    options
+#    )
+#  )
+hook_in <- function(x, options) {
+  x <- x[!grepl("^#\\s+", x)]
+  paste0("```r\n",
+         paste0(x, collapse="\n"),
+         "\n```")
+}
+knitr::knit_hooks$set(source = hook_in)
+
+library(kableExtra)
+library(xtable)
+
+options(scipen = 999)
+
+xtable2kable2 <- function(x) {
+  out <- capture.output(print(x, table.placement = NULL))[-(1:2)]
+  out <- paste(out, collapse = "\n")
+  structure(out, format = "latex", class = "knitr_kable")
+}
+
+xtable2kable3 <- function (x, ...) 
+{
+    if (!class(x)[1] == "xtable") {
+        warning("x is not an xtable object.")
+        return(x)
+    }
+    out <- capture.output(print(x, wp = TRUE, ...))[-(1:2)]
+    out <- paste(out, collapse = "\n")
+    xtable_print_options <- list(...)
+    if ("type" %in% names(xtable_print_options) && xtable_print_options$type == 
+        "html") {
+        out <- structure(out, format = "html", class = "knitr_kable")
+        return(out)
+    }
+    out <- structure(out, format = "latex", class = "knitr_kable")
+    out_meta <- magic_mirror(out)
+    if ("table.placement" %in% names(xtable_print_options)) {
+        out_meta$valign <- ""
+    }
+    out_meta$valign <- ""
+    if ("tabular.environment" %in% names(xtable_print_options)) {
+        out_meta$tabular <- xtable_print_options$tabular.environment
+    }
+    attr(out, "kable_meta") <- out_meta
+    #out <- str_replace(out, "\\[ht\\]", "")
+    return(out)
+}
+
+vcText <- function(text){
+    paste0("\\multirow{1}{*}[0pt]{", text, "}")
+  }
+```
+
+```{r child='data-manipulation.Rmd'}
+```
+
